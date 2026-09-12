@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Samarjit Maity — Product Management Lead specializing in CRM, B2B SaaS, Agentic AI and enterprise platforms." />
+  <title>Samarjit Maity — Product Management Lead</title>
+
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: #d2d2d7;
+      --accent: #0071e3;
+      --dark: #161617;
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont,
+        "SF Pro Display", "SF Pro Text", "Segoe UI",
+        Arial, sans-serif;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* NAVIGATION */
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(245, 245, 247, 0.84);
+      border-bottom: 1px solid rgba(210, 210, 215, 0.65);
+    }
+
+    .nav-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* HERO */
+
+    .hero {
+      padding: 110px 0 90px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    h1 {
+      max-width: 980px;
+      font-size: clamp(52px, 8vw, 104px);
+      line-height: 0.98;
+      letter-spacing: -0.075em;
+      margin: 24px 0 30px;
+      font-weight: 750;
+    }
+
+    .hero-copy {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(19px, 2.2vw, 27px);
+      line-height: 1.35;
+      letter-spacing: -0.025em;
+      margin-bottom: 36px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 20px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 15px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* SECTIONS */
+
+    section {
+      padding: 76px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      align-items: end;
+      margin-bottom: 32px;
+    }
+
+    .section-kicker {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -0.06em;
+      margin: 0;
+    }
+
+    .section-intro {
+      max-width: 450px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 30px;
+      border: 1px solid rgba(210, 210, 215, 0.7);
+    }
+
+    .card h3 {
+      font-size: 23px;
+      letter-spacing: -0.035em;
+      margin: 16px 0 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .number {
+      font-size: 46px;
+      font-weight: 750;
+      letter-spacing: -0.06em;
+      line-height: 1;
+    }
+
+    .number-label {
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #f0f0f2;
+      font-size: 20px;
+    }
+
+    /* DARK SECTIONS */
+
+    .dark-section {
+      background: var(--dark);
+      color: #f5f5f7;
+    }
+
+    .dark-section .section-intro,
+    .dark-section .section-kicker {
+      color: #a1a1a6;
+    }
+
+    .dark-section .card {
+      background: #242426;
+      border-color: #3a3a3c;
+    }
+
+    .dark-section .card p {
+      color: #a1a1a6;
+    }
+
+    /* TIMELINE */
+
+    .timeline {
+      position: relative;
+      border-left: 1px solid var(--line);
+      margin-left: 10px;
+    }
+
+    .role {
+      position: relative;
+      padding: 0 0 44px 34px;
+    }
+
+    .role:last-child {
+      padding-bottom: 0;
+    }
+
+    .role::before {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: 7px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+    }
+
+    .role-meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .role h3 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.04em;
+    }
+
+    .role-company {
+      color: var(--accent);
+      font-weight: 650;
+      margin: 4px 0 12px;
+    }
+
+    .role ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .role li {
+      margin: 7px 0;
+    }
+
+    /* SKILLS */
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .pill {
+      background: #f0f0f2;
+      color: #3a3a3c;
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* CONTACT */
+
+    .contact-card {
+      background: var(--dark);
+      color: #fff;
+      border-radius: 32px;
+      padding: clamp(30px, 6vw, 70px);
+    }
+
+    .contact-card p {
+      color: #a1a1a6;
+      max-width: 560px;
+      font-size: 19px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .contact-links a {
+      color: #fff;
+      border: 1px solid #48484a;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 30px 0 45px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    /* ANIMATION */
+
+    .fade {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+    }
+
+    .fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* TABLET */
+
+    @media (max-width: 800px) {
+      .nav-links {
+        gap: 12px;
+      }
+
+      .hero {
+        padding: 76px 0 60px;
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-intro {
+        margin-top: 16px;
+      }
+
+      .grid.three,
+      .grid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 25px;
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 520px) {
+      .container {
+        width: min(var(--max), calc(100% - 28px));
+      }
+
+      .nav-inner {
+        min-height: 58px;
+      }
+
+      .brand {
+        font-size: 14px;
+      }
+
+      .nav-links {
+        font-size: 12px;
+        gap: 10px;
+      }
+
+      h1 {
+        font-size: 54px;
+      }
+
+      .hero-copy {
+        font-size: 20px;
+      }
+
+      footer {
+        display: block;
+      }
+
+      footer div + div {
+        margin-top: 8px;
+      }
+    }
+
+    /* REDUCED MOTION */
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .fade {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .button {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+
+  <header class="nav">
+    <div class="container nav-inner">
+
+      <a class="brand" href="#top">
+        Samarjit <span>Maity</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#expertise">Expertise</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+
+    <section class="hero">
+      <div class="container">
+
+        <div class="eyebrow">
+          Product Management · Enterprise AI
+        </div>
+
+        <h1>
+          Building products that make complex work feel simple.
+        </h1>
+
+        <p class="hero-copy">
+          Product Management Lead with 15+ years of experience
+          building and scaling enterprise CRM and B2B SaaS platforms —
+          with a focus on Agentic AI, intelligent workflows,
+          and measurable customer impact.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="#work">
+            Explore my work ↓
+          </a>
+
+          <a class="button" href="mailto:jeet3297@gmail.com">
+            Let's connect ↗
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+
+    <section id="about">
+      <div class="container">
+
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">
+              01 — The profile
+            </div>
+
+            <h2>
+              Strategy meets<br />
+              execution.
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            I connect customer needs, business strategy,
+            technology, and delivery to create enterprise
+            products that scale.
+          </p>
+        </div>
+
+        <div class="grid three">
+
+          <article class="card fade">
+            <div class="number">15+</div>
+
+            <div class="number-label">
+              Years building enterprise CRM and B2B SaaS products
+            </div>
+          </article>
+
+          <article class="card fade">
+            <div class="number">100+</div>
+
+            <div class="number-label">
+              Enterprise customers adopting platforms led at Salesforce
+            </div>
+          </article>
+
+          <article class="card fade">
+            <div class="number">60+</div>
+
+            <div class="number-label">
+              Healthcare and life sciences customers reached at Pega
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECTED WORK -->
+
+    <section id="work" class="dark-section">
+      <div class="container">
+
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">
+              02 — Selected experience
+            </div>
+
+            <h2>
+              Products with<br />
+              purpose.
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            From 0→1 platform launches to AI-powered
+            workflow transformation, my work sits at the
+            intersection of product vision and real-world adoption.
+          </p>
+        </div>
+
+        <div class="grid two">
+
+          <article class="card fade">
+            <div class="icon">◈</div>
+
+            <h3>
+              Enterprise CRM Platforms
+            </h3>
+
+            <p>
+              Led product strategy, roadmap, delivery,
+              and lifecycle for Brokerage CRM with Commissions
+              and Insurance Policy Administration platforms
+              adopted by 100+ enterprise customers.
+            </p>
+          </article>
+
+          <article class="card fade">
+            <div class="icon">✦</div>
+
+            <h3>
+              Agentic AI & RAG
+            </h3>
+
+            <p>
+              Defined and launched RAG-grounded agents,
+              predictive models, standardized industry models,
+              semantic mappings, and RAG pipelines for
+              intelligent enterprise workflows.
+            </p>
+          </article>
+
+          <article class="card fade">
+            <div class="icon">⌁</div>
+
+            <h3>
+              Healthcare & Life Sciences
+            </h3>
+
+            <p>
+              Pivoted a CRM platform into a healthcare
+              and life sciences product, scaling from
+              initial launch to 60+ customers and
+              contributing to Forrester recognition.
+            </p>
+          </article>
+
+          <article class="card fade">
+            <div class="icon">↗</div>
+
+            <h3>
+              Product Commercialization
+            </h3>
+
+            <p>
+              Led pricing and packaging strategy,
+              partnered with go-to-market teams on reusable
+              demos and collateral, and served as a key
+              customer point of contact.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERTISE -->
+
+    <section id="expertise">
+      <div class="container">
+
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">
+              03 — Core capabilities
+            </div>
+
+            <h2>
+              What I bring<br />
+              to the table.
+            </h2>
+          </div>
+        </div>
+
+        <div class="grid two">
+
+          <article class="card fade">
+            <div class="icon">⌘</div>
+
+            <h3>
+              Product leadership
+            </h3>
+
+            <p>
+              Product strategy, portfolio direction,
+              roadmap ownership, 0→1 launches,
+              lifecycle management, pricing and packaging,
+              customer discovery, and cross-functional execution.
+            </p>
+
+            <div class="pill-list">
+              <span class="pill">Product Strategy</span>
+              <span class="pill">Roadmaps</span>
+              <span class="pill">GTM</span>
+              <span class="pill">Customer Discovery</span>
+              <span class="pill">B2B SaaS</span>
+            </div>
+          </article>
+
+          <article class="card fade">
+            <div class="icon">✧</div>
+
+            <h3>
+              AI product expertise
+            </h3>
+
+            <p>
+              Applied AI product definition and launch
+              across customer service, risk assessment,
+              customer lifecycle, policy, and claims workflows.
+            </p>
+
+            <div class="pill-list">
+              <span class="pill">Agentic AI</span>
+              <span class="pill">RAG</span>
+              <span class="pill">Prompt Engineering</span>
+              <span class="pill">Predictive Models</span>
+              <span class="pill">AI Strategy</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CAREER JOURNEY -->
+
+    <section>
+      <div class="container">
+
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">
+              04 — Career journey
+            </div>
+
+            <h2>
+              A track record<br />
+              of building.
+            </h2>
+          </div>
+        </div>
+
+        <div class="timeline">
+
+          <article class="role fade">
+
+            <div class="role-meta">
+              September 2021 — April 2026 · Hyderabad
+            </div>
+
+            <h3>
+              Senior Manager of Product Management
+            </h3>
+
+            <div class="role-company">
+              Salesforce
+            </div>
+
+            <ul>
+              <li>
+                Led product strategy, roadmap, delivery,
+                and distribution for financial services
+                and insurance products.
+              </li>
+
+              <li>
+                Launched two 0→1 enterprise platforms
+                adopted by 100+ customers.
+              </li>
+
+              <li>
+                Defined AI strategy across RAG-grounded agents,
+                predictive models, and Agentic AI data foundations.
+              </li>
+
+              <li>
+                Led pricing and packaging strategy and
+                partnered with go-to-market teams.
+              </li>
+            </ul>
+
+          </article>
+
+          <article class="role fade">
+
+            <div class="role-meta">
+              July 2014 — September 2021 · Hyderabad
+            </div>
+
+            <h3>
+              Product Manager
+            </h3>
+
+            <div class="role-company">
+              Pegasystems
+            </div>
+
+            <ul>
+              <li>
+                Owned CRM capabilities across Customer 360,
+                Account Management, and self-service.
+              </li>
+
+              <li>
+                Pivoted to a 0→1 CRM product focused
+                on Healthcare & Life Sciences.
+              </li>
+
+              <li>
+                Integrated Pega CRM with Customer Decision Hub
+                to power next-best-action recommendations.
+              </li>
+
+              <li>
+                Scaled the product to 60+ customers
+                and contributed to Forrester recognition.
+              </li>
+            </ul>
+
+          </article>
+
+          <article class="role fade">
+
+            <div class="role-meta">
+              July 2013 — June 2014 · Hyderabad
+            </div>
+
+            <h3>
+              Business Analyst & Project Manager
+            </h3>
+
+            <div class="role-company">
+              Tata Projects
+            </div>
+
+            <ul>
+              <li>
+                Led internal CRM and document management
+                implementation for 15K+ users.
+              </li>
+            </ul>
+
+          </article>
+
+          <article class="role fade">
+
+            <div class="role-meta">
+              September 2011 — June 2013 · Mumbai
+            </div>
+
+            <h3>
+              Product Manager
+            </h3>
+
+            <div class="role-company">
+              IMS Health Relationship Management
+            </div>
+
+            <ul>
+              <li>
+                Managed a life sciences-focused CRM platform
+                and supported presales and business analysis
+                engagements across APAC.
+              </li>
+            </ul>
+
+          </article>
+
+          <article class="role fade">
+
+            <div class="role-meta">
+              January 2009 — August 2011 · Mumbai
+            </div>
+
+            <h3>
+              Presales Consultant
+            </h3>
+
+            <div class="role-company">
+              Intertec Systems
+            </div>
+
+            <ul>
+              <li>
+                Led presales and requirements management
+                for ITIL servicedesk implementations
+                across major enterprise customers.
+              </li>
+            </ul>
+
+          </article>
+
+          <article class="role fade">
+
+            <div class="role-meta">
+              July 2006 — January 2009 · Mumbai
+            </div>
+
+            <h3>
+              SAP Consultant
+            </h3>
+
+            <div class="role-company">
+              Capgemini Consulting
+            </div>
+
+            <ul>
+              <li>
+                Worked on SAP enhancement rollouts
+                and ABAP development for global clients.
+              </li>
+            </ul>
+
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+
+    <section class="dark-section">
+      <div class="container">
+
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">
+              05 — Education
+            </div>
+
+            <h2>
+              Always<br />
+              learning.
+            </h2>
+          </div>
+        </div>
+
+        <div class="grid two">
+
+          <article class="card fade">
+
+            <div class="role-meta">
+              2008 — 2009
+            </div>
+
+            <h3>
+              Executive Program in Business Analytics
+            </h3>
+
+            <p>
+              Indian Institute of Management, Calcutta
+            </p>
+
+            <p style="margin-top:10px;">
+              Strategy · Marketing · Analytics
+            </p>
+
+          </article>
+
+          <article class="card fade">
+
+            <div class="role-meta">
+              2002 — 2006
+            </div>
+
+            <h3>
+              B.Tech, Electronics & Communication Engineering
+            </h3>
+
+            <p>
+              West Bengal University of Technology
+            </p>
+
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+
+    <section id="contact">
+      <div class="container">
+
+        <div class="contact-card fade">
+
+          <div class="eyebrow" style="color:#a1a1a6;">
+            Let's build what's next
+          </div>
+
+          <h2 style="margin-top:20px;">
+            Have a complex<br />
+            product problem?
+          </h2>
+
+          <p>
+            I'm open to conversations around product leadership,
+            enterprise AI, CRM transformation, and building
+            products that create meaningful business value.
+          </p>
+
+          <div class="contact-links">
+
+            <a href="mailto:jeet3297@gmail.com">
+              jeet3297@gmail.com ↗
+            </a>
+
+            <a href="tel:+919550472598">
+              +91 95504 72598 ↗
+            </a>
+
+            <a
+              href="https://www.linkedin.com/in/samarjitmaity"
+              target="_blank"
+              rel="noopener"
+            >
+              LinkedIn ↗
+            </a>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="container">
+
+    <div>
+      © <span id="year"></span> Samarjit Maity
+    </div>
+
+    <div>
+      Product Management · CRM · Enterprise AI
+    </div>
+
+  </footer>
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    const items = document.querySelectorAll(".fade");
+
+    if ("IntersectionObserver" in window) {
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+
+          entries.forEach((entry) => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add("visible");
+
+              observer.unobserve(entry.target);
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.12
+        }
+      );
+
+      items.forEach((item) => observer.observe(item));
+
+    } else {
+
+      items.forEach((item) => {
+        item.classList.add("visible");
+      });
+
+    }
+  </script>
+
+</body>
+</html>
