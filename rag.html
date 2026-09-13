@@ -1,0 +1,1678 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG Lab — Interactive Simulator</title>
+
+<style>
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #172033;
+  --muted: #697386;
+  --line: #e3e8f0;
+  --accent: #5267e8;
+  --accent-light: #eef0ff;
+  --green: #16845b;
+  --orange: #c77b16;
+  --shadow: 0 8px 30px rgba(28,42,70,.06);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button, input, textarea, select { font: inherit; }
+
+button { cursor: pointer; }
+
+.app {
+  max-width: 1160px;
+  margin: auto;
+  padding: 34px 22px 60px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 44px;
+  height: 44px;
+  background: #172033;
+  color: white;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  font-size: 23px;
+}
+
+h1 {
+  font-size: 27px;
+  letter-spacing: -1px;
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.badge {
+  background: #e6f7ef;
+  color: var(--green);
+  padding: 7px 11px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.workflow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.step {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 15px;
+  text-align: left;
+  color: var(--text);
+  transition: .2s;
+}
+
+.step.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.step-number {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.step-title {
+  font-size: 14px;
+  font-weight: 750;
+  margin-top: 8px;
+}
+
+.step-desc {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.progress {
+  height: 4px;
+  background: var(--line);
+  border-radius: 20px;
+  margin-top: -12px;
+  margin-bottom: 26px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 25%;
+  height: 100%;
+  background: var(--accent);
+  transition: .3s;
+}
+
+.stage { display: none; }
+.stage.active { display: block; }
+
+.stage-heading {
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 23px;
+  letter-spacing: -.7px;
+  margin: 6px 0;
+}
+
+.description {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+h3 {
+  font-size: 15px;
+  margin: 0 0 14px;
+}
+
+label {
+  font-size: 12px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 7px;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fafbfe;
+  border-radius: 10px;
+  padding: 11px 12px;
+  color: var(--text);
+  outline: none;
+}
+
+textarea { resize: vertical; }
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+}
+
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-secondary {
+  background: #f0f2f7;
+  color: var(--text);
+}
+
+.btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.doc {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 13px;
+  margin-bottom: 10px;
+}
+
+.doc-title {
+  font-weight: 750;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.doc-text {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tag {
+  background: #f0f2f7;
+  border: 1px solid var(--line);
+  padding: 4px 7px;
+  border-radius: 5px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 18px 0;
+}
+
+.pipeline span {
+  background: #f2f4fa;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.arrow { color: var(--muted); }
+
+.code {
+  background: #172033;
+  color: #dce6f3;
+  border-radius: 12px;
+  padding: 15px;
+  font: 12px/1.8 Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.metric {
+  background: #f7f8fc;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-top: 4px;
+}
+
+.result {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.result.selected {
+  border-color: var(--accent);
+  background: #f5f6ff;
+}
+
+.score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 9px;
+}
+
+.score-track {
+  flex: 1;
+  height: 6px;
+  background: var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  background: #608fd4;
+}
+
+.score-number {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.status {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.answer {
+  background: #f0faf5;
+  border: 1px solid #b9e6ce;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.answer-title {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.answer-text {
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+
+.source {
+  background: white;
+  border: 1px solid #d4eadc;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  margin-top: 7px;
+}
+
+.quiz-option {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.quiz-option:hover { border-color: var(--accent); }
+
+.quiz-option.correct {
+  background: #e8f7ef;
+  border-color: var(--green);
+}
+
+.quiz-option.wrong {
+  background: #fff0ef;
+  border-color: #d65e56;
+}
+
+.hidden { display: none !important; }
+
+.footer-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 25px;
+}
+
+@media (max-width: 720px) {
+  .app { padding: 22px 14px 40px; }
+  header { align-items: flex-start; }
+  h1 { font-size: 23px; }
+  .workflow { grid-template-columns: 1fr 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+  .badge { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">✦</div>
+    <div>
+      <h1>RAG Lab</h1>
+      <div class="subtitle">Explore Retrieval-Augmented Generation</div>
+    </div>
+  </div>
+  <div class="badge">● Offline simulator</div>
+</header>
+
+<div class="card" style="margin-bottom:20px">
+
+  <div class="workflow">
+    <button class="step active" data-stage="0">
+      <div class="step-number">01 / INGEST</div>
+      <div class="step-title">Indexing</div>
+      <div class="step-desc">Build knowledge</div>
+    </button>
+
+    <button class="step" data-stage="1">
+      <div class="step-number">02 / RETRIEVE</div>
+      <div class="step-title">Search</div>
+      <div class="step-desc">Find evidence</div>
+    </button>
+
+    <button class="step" data-stage="2">
+      <div class="step-number">03 / PREPARE</div>
+      <div class="step-title">Reranking</div>
+      <div class="step-desc">Select context</div>
+    </button>
+
+    <button class="step" data-stage="3">
+      <div class="step-number">04 / GENERATE</div>
+      <div class="step-title">Answer</div>
+      <div class="step-desc">Grounded output</div>
+    </button>
+  </div>
+
+  <div class="progress">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <!-- STAGE 1 -->
+
+  <section class="stage active" data-panel="0">
+
+    <div class="stage-heading">
+      <div class="eyebrow">Stage 01</div>
+      <h2>Build your knowledge base</h2>
+      <div class="description">
+        Before answering questions, RAG prepares documents for retrieval.
+        Clean, chunk, embed, and store them in a vector database.
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="stack">
+
+        <div class="card">
+          <h3>📚 Source documents</h3>
+
+          <div class="doc">
+            <div class="doc-title">Returns & Refunds Policy</div>
+            <div class="doc-text">
+              Customers can return most items within 30 days of delivery.
+              Items must be unused and in original packaging.
+              Refunds are processed after inspection.
+            </div>
+            <div class="tags">
+              <span class="tag">policy</span>
+              <span class="tag">returns</span>
+            </div>
+          </div>
+
+          <div class="doc">
+            <div class="doc-title">Customer Service Playbook</div>
+            <div class="doc-text">
+              Agents should verify the order number, confirm the customer's
+              identity, and explain the applicable policy before creating
+              a return request.
+            </div>
+            <div class="tags">
+              <span class="tag">support</span>
+              <span class="tag">workflow</span>
+            </div>
+          </div>
+
+          <div class="doc">
+            <div class="doc-title">Shipping & Delivery Guide</div>
+            <div class="doc-text">
+              Standard delivery usually takes 3–5 business days.
+              Express delivery takes 1–2 business days.
+              Customers can track orders from the order details page.
+            </div>
+            <div class="tags">
+              <span class="tag">shipping</span>
+              <span class="tag">delivery</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card">
+          <h3>⚙️ Chunking configuration</h3>
+
+          <label for="chunkSize">Chunk size</label>
+          <select id="chunkSize">
+            <option value="small">Small — more granular</option>
+            <option value="medium" selected>Medium — balanced</option>
+            <option value="large">Large — more context</option>
+          </select>
+
+          <br><br>
+
+          <label for="overlap">Chunk overlap</label>
+          <select id="overlap">
+            <option value="0">0% — no overlap</option>
+            <option value="10" selected>10% — recommended starting point</option>
+            <option value="25">25% — more continuity</option>
+          </select>
+
+          <br>
+
+          <button class="btn btn-primary" id="buildIndex">
+            Build / rebuild index →
+          </button>
+
+          <div class="status" id="indexStatus">
+            Ready to build a simulated index.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="stack">
+
+        <div class="card">
+          <h3>How indexing works</h3>
+
+          <div class="pipeline">
+            <span>Clean docs</span>
+            <i class="arrow">→</i>
+            <span>Chunk</span>
+            <i class="arrow">→</i>
+            <span>Embed</span>
+            <i class="arrow">→</i>
+            <span>Store</span>
+          </div>
+
+          <div class="code" id="indexCode">documents = load_documents()
+cleaned = clean(documents)
+chunks = split(cleaned)
+vectors = embed(chunks)
+vector_db.upsert(chunks, vectors)</div>
+
+          <p class="muted">
+            Embeddings are numerical representations of meaning.
+            Similar questions and documents tend to have similar vectors.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Index health</h3>
+
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="metric-label">Chunks</div>
+              <div class="metric-value" id="chunksCount">—</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Embeddings</div>
+              <div class="metric-value" id="vectorsCount">—</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Metadata</div>
+              <div class="metric-value" id="metadataCount">—</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Status</div>
+              <div class="metric-value" id="healthStatus">Pending</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Why metadata matters</h3>
+          <p class="muted">
+            Metadata enables filtering by document type, department,
+            date, tenant, and access permissions.
+          </p>
+
+          <div class="tags">
+            <span class="tag">source</span>
+            <span class="tag">page</span>
+            <span class="tag">department</span>
+            <span class="tag">access</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="actions">
+      <span></span>
+      <button class="btn btn-primary" id="toRetrieval">
+        Continue to retrieval →
+      </button>
+    </div>
+
+  </section>
+
+  <!-- STAGE 2 -->
+
+  <section class="stage" data-panel="1">
+
+    <div class="stage-heading">
+      <div class="eyebrow">Stage 02</div>
+      <h2>Retrieve relevant evidence</h2>
+      <div class="description">
+        Convert the user's question into a search representation.
+        Retrieve candidate chunks using semantic and keyword signals.
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px">
+
+      <label for="query">User query</label>
+
+      <textarea id="query" rows="2">Can I return an unused item after 20 days?</textarea>
+
+      <div class="tags" style="margin-bottom:15px">
+        <button class="btn btn-secondary example"
+          data-q="Can I return an unused item after 20 days?">
+          Returns policy
+        </button>
+
+        <button class="btn btn-secondary example"
+          data-q="How long does express shipping take?">
+          Shipping time
+        </button>
+
+        <button class="btn btn-secondary example"
+          data-q="What should an agent verify before creating a return?">
+          Agent workflow
+        </button>
+
+        <button class="btn btn-secondary example"
+          data-q="What is the company's vacation policy?">
+          Unknown topic
+        </button>
+      </div>
+
+      <label>
+        <input type="checkbox" id="hybrid" checked>
+        Use hybrid search
+      </label>
+
+      <label>
+        <input type="checkbox" id="policyFilter">
+        Only search policy documents
+      </label>
+
+      <button class="btn btn-primary" id="runRetrieval">
+        Search knowledge base ↗
+      </button>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="stack">
+
+        <div class="card">
+          <h3>Query representation</h3>
+
+          <div class="code" id="queryCode">query = "Can I return an unused item after 20 days?"
+embedding = embed(query)
+results = vector_db.search(embedding, top_k=5)</div>
+
+          <p class="muted">
+            This simulator uses keyword and topic similarity.
+            A real system uses an embedding model and vector search.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Search strategies</h3>
+
+          <div class="doc">
+            <div class="doc-title">Dense retrieval</div>
+            <div class="doc-text">Semantic similarity using embeddings.</div>
+            <div class="tags"><span class="tag">Vector</span></div>
+          </div>
+
+          <div class="doc">
+            <div class="doc-title">Keyword retrieval</div>
+            <div class="doc-text">Matches exact terms and phrases.</div>
+            <div class="tags"><span class="tag">BM25-like</span></div>
+          </div>
+
+          <div class="doc">
+            <div class="doc-title">Hybrid retrieval</div>
+            <div class="doc-text">Combines semantic and keyword signals.</div>
+            <div class="tags"><span class="tag">Recommended</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="stack">
+
+        <div class="card">
+          <h3>Retrieved candidates</h3>
+
+          <div id="retrievalResults">
+            <p class="muted">
+              Run a search to see candidate chunks and relevance scores.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Retrieval metrics</h3>
+
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="metric-label">Recall@5</div>
+              <div class="metric-value" id="recall">—</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Precision@5</div>
+              <div class="metric-value" id="precision">—</div>
+            </div>
+          </div>
+
+          <p class="muted">
+            Recall asks whether relevant evidence was found.
+            Precision asks how much of the retrieved evidence is relevant.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" data-go="0">← Indexing</button>
+      <button class="btn btn-primary" id="toRerank">
+        Continue to reranking →
+      </button>
+    </div>
+
+  </section>
+
+  <!-- STAGE 3 -->
+
+  <section class="stage" data-panel="2">
+
+    <div class="stage-heading">
+      <div class="eyebrow">Stage 03</div>
+      <h2>Rerank and prepare context</h2>
+      <div class="description">
+        Initial retrieval may return several candidates.
+        Reranking improves relevance before the context is sent to the LLM.
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px">
+
+      <h3>Candidate → reranker → context</h3>
+
+      <div class="pipeline">
+        <span>Retrieved candidates</span>
+        <i class="arrow">→</i>
+        <span>Relevance model</span>
+        <i class="arrow">→</i>
+        <span>Top K</span>
+        <i class="arrow">→</i>
+        <span>Prompt context</span>
+      </div>
+
+      <p class="muted">
+        A reranker can be a cross-encoder or specialized relevance model.
+        It does not have to be a small LLM.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <div class="stack">
+
+        <div class="card">
+          <h3>Reranker settings</h3>
+
+          <label for="topK">
+            Chunks to send to the LLM:
+            <span id="topKLabel">3</span>
+          </label>
+
+          <input type="range" id="topK" min="1" max="5" value="3"
+            style="width:100%;accent-color:var(--accent)">
+
+          <br>
+
+          <label>
+            <input type="checkbox" id="useReranker" checked>
+            Use reranker
+          </label>
+
+          <label>
+            <input type="checkbox" id="contextBudget" checked>
+            Apply context budget
+          </label>
+
+          <button class="btn btn-primary" id="runRerank">
+            Rerank candidates →
+          </button>
+        </div>
+
+        <div class="card">
+          <h3>Why context preparation matters</h3>
+
+          <p class="muted">
+            ✓ Remove irrelevant chunks<br>
+            ✓ Respect context window limits<br>
+            ✓ Preserve source identifiers<br>
+            ✓ Prevent unauthorized content from entering the prompt
+          </p>
+        </div>
+
+      </div>
+
+      <div class="stack">
+
+        <div class="card">
+          <h3>Reranked results</h3>
+
+          <div id="rerankResults">
+            <p class="muted">
+              Run retrieval first, then rerank candidates.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Context window</h3>
+
+          <div class="muted" id="contextCount">0 chunks selected</div>
+
+          <div class="score-track" style="margin-top:10px">
+            <div class="score-fill" id="contextBar" style="width:0%"></div>
+          </div>
+
+          <br>
+
+          <div class="code" id="contextCode">context = []</div>
+
+          <p class="muted">
+            More chunks are not always better.
+            Irrelevant or conflicting context can reduce answer quality.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" data-go="1">← Retrieval</button>
+      <button class="btn btn-primary" id="toGenerate">
+        Continue to generation →
+      </button>
+    </div>
+
+  </section>
+
+  <!-- STAGE 4 -->
+
+  <section class="stage" data-panel="3">
+
+    <div class="stage-heading">
+      <div class="eyebrow">Stage 04</div>
+      <h2>Generate a grounded answer</h2>
+      <div class="description">
+        The orchestration layer combines system instructions,
+        retrieved context, and the user query before calling the LLM.
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px">
+
+      <h3>Prompt assembly</h3>
+
+      <div class="code" id="promptCode">SYSTEM:
+You are a helpful customer service assistant.
+Answer using only the provided context.
+If the context is insufficient, say you do not know.
+
+CONTEXT:
+[Retrieved chunks appear here]
+
+USER:
+Can I return an unused item after 20 days?</div>
+
+      <p class="muted">
+        Retrieved content is usually supplied as context.
+        It is not necessarily inserted into the system prompt.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <div class="stack">
+
+        <div class="card">
+          <h3>Generation controls</h3>
+
+          <label>
+            <input type="checkbox" id="citations" checked>
+            Require citations
+          </label>
+
+          <label>
+            <input type="checkbox" id="guardrail" checked>
+            Grounding guardrail
+          </label>
+
+          <button class="btn btn-primary" id="generate">
+            Generate answer ✦
+          </button>
+
+          <div class="status" id="genStatus">
+            Ready. Use the current retrieved context.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Generation checklist</h3>
+
+          <p class="muted">
+            ✓ Relevant context retrieved<br>
+            ✓ Evidence passed to generator<br>
+            ✓ Unsupported claims controlled<br>
+            ✓ Sources traceable
+          </p>
+        </div>
+
+      </div>
+
+      <div class="stack">
+
+        <div class="answer">
+          <div class="answer-title">● Grounded response · Mock LLM</div>
+
+          <div class="answer-text" id="answerText">
+            Your answer will appear here after generation.
+          </div>
+
+          <div id="answerSources"></div>
+        </div>
+
+        <div class="card">
+          <h3>Grounding inspection</h3>
+
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="metric-label">Evidence coverage</div>
+              <div class="metric-value" id="coverage">—</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Faithfulness</div>
+              <div class="metric-value" id="faithfulness">—</div>
+            </div>
+          </div>
+
+          <p class="muted">
+            These are illustrative simulator scores,
+            not measurements of a real LLM.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" data-go="2">← Reranking</button>
+      <button class="btn btn-primary" id="runEvaluation">
+        Run evaluation →
+      </button>
+    </div>
+
+  </section>
+
+</div>
+
+<!-- EVALUATION -->
+
+<div class="card">
+
+  <div class="eyebrow">Production readiness</div>
+  <h2>Evaluate the whole system</h2>
+
+  <p class="description">
+    A good RAG demo is not enough. Evaluate retrieval, generation,
+    latency, cost, and business outcomes.
+  </p>
+
+  <div class="metric-grid">
+
+    <div class="metric">
+      <div class="metric-label">Retrieval</div>
+      <div class="metric-value" style="font-size:18px">Recall@K</div>
+      <div class="muted">Relevant evidence found</div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-label">Retrieval</div>
+      <div class="metric-value" style="font-size:18px">Precision@K</div>
+      <div class="muted">Relevant evidence ratio</div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-label">Generation</div>
+      <div class="metric-value" style="font-size:18px">Faithfulness</div>
+      <div class="muted">Claims supported by evidence</div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-label">Business</div>
+      <div class="metric-value" style="font-size:18px">CSAT</div>
+      <div class="muted">Customer satisfaction</div>
+    </div>
+
+  </div>
+
+  <br>
+
+  <button class="btn btn-primary" id="openQuiz">
+    Open evaluation quiz →
+  </button>
+
+  <div id="quiz" class="hidden" style="margin-top:22px">
+
+    <h3>Which metric measures whether relevant evidence appears in the retrieved top K results?</h3>
+
+    <button class="quiz-option" data-answer="wrong">A. CSAT</button>
+    <button class="quiz-option" data-answer="correct">B. Recall@K</button>
+    <button class="quiz-option" data-answer="wrong">C. LLM temperature</button>
+    <button class="quiz-option" data-answer="wrong">D. Number of generated tokens</button>
+
+    <p id="quizResult" class="muted"></p>
+
+  </div>
+
+</div>
+
+<div class="footer-note">
+  RAG Lab · Educational simulator · No external APIs · No data leaves your browser
+</div>
+
+</div>
+
+<script>
+(function () {
+"use strict";
+
+/* -------------------------
+   State
+------------------------- */
+
+const state = {
+  stage: 0,
+  indexed: false,
+  chunks: [],
+  retrieved: [],
+  reranked: []
+};
+
+const $ = id => document.getElementById(id);
+
+const docs = [
+  {
+    id: "RET-01",
+    title: "Returns & Refunds Policy",
+    type: "policy",
+    topic: "returns",
+    text: "Customers can return most items within 30 days of delivery. Items must be unused and in original packaging. Refunds are processed after inspection."
+  },
+  {
+    id: "RET-02",
+    title: "Customer Service Playbook",
+    type: "workflow",
+    topic: "support",
+    text: "Agents should verify the order number, confirm the customer's identity, and explain the applicable policy before creating a return request."
+  },
+  {
+    id: "SHP-01",
+    title: "Shipping & Delivery Guide",
+    type: "shipping",
+    topic: "shipping",
+    text: "Standard delivery usually takes 3–5 business days. Express delivery takes 1–2 business days. Customers can track orders from the order details page."
+  },
+  {
+    id: "RET-03",
+    title: "Returns & Refunds Policy",
+    type: "policy",
+    topic: "returns",
+    text: "Refunds are processed after inspection. Items that are used or missing original packaging may not qualify for a standard return."
+  },
+  {
+    id: "SHP-02",
+    title: "Shipping & Delivery Guide",
+    type: "shipping",
+    topic: "shipping",
+    text: "Customers can track orders from the order details page. Delivery estimates can vary by destination and carrier."
+  }
+];
+
+/* -------------------------
+   Navigation
+------------------------- */
+
+function setStage(n) {
+  state.stage = n;
+
+  document.querySelectorAll(".step").forEach((button, i) => {
+    button.classList.toggle("active", i === n);
+  });
+
+  document.querySelectorAll(".stage").forEach((panel, i) => {
+    panel.classList.toggle("active", i === n);
+  });
+
+  $("progress").style.width = ((n + 1) * 25) + "%";
+}
+
+document.querySelectorAll(".step").forEach(button => {
+  button.addEventListener("click", () => {
+    setStage(Number(button.dataset.stage));
+  });
+});
+
+document.querySelectorAll("[data-go]").forEach(button => {
+  button.addEventListener("click", () => {
+    setStage(Number(button.dataset.go));
+  });
+});
+
+$("toRetrieval").addEventListener("click", () => setStage(1));
+$("toRerank").addEventListener("click", () => setStage(2));
+$("toGenerate").addEventListener("click", () => setStage(3));
+
+/* -------------------------
+   Utility
+------------------------- */
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[char]));
+}
+
+function tokenize(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+function ensureIndex() {
+  if (!state.indexed) buildIndex();
+}
+
+/* -------------------------
+   Stage 1: Indexing
+------------------------- */
+
+function buildIndex() {
+  const size = $("chunkSize").value;
+  const overlap = Number($("overlap").value);
+
+  const chunks = [];
+
+  docs.forEach(doc => {
+    const words = doc.text.split(/\s+/);
+
+    let numberOfChunks;
+
+    if (size === "small") {
+      numberOfChunks = Math.max(2, Math.ceil(words.length / 7));
+    } else if (size === "medium") {
+      numberOfChunks = Math.max(1, Math.ceil(words.length / 14));
+    } else {
+      numberOfChunks = 1;
+    }
+
+    for (let i = 0; i < numberOfChunks; i++) {
+      const start = Math.floor(i * words.length / numberOfChunks);
+      const end = Math.floor((i + 1) * words.length / numberOfChunks);
+
+      const overlapWords = Math.floor(
+        (end - start) * overlap / 100
+      );
+
+      const chunkText = words.slice(
+        Math.max(0, start - overlapWords),
+        end
+      ).join(" ");
+
+      chunks.push({
+        ...doc,
+        id: doc.id + "-C" + (i + 1),
+        text: chunkText,
+        chunk: i + 1,
+        total: numberOfChunks
+      });
+    }
+  });
+
+  state.chunks = chunks;
+  state.indexed = true;
+  state.retrieved = [];
+  state.reranked = [];
+
+  $("chunksCount").textContent = chunks.length;
+  $("vectorsCount").textContent = chunks.length;
+  $("metadataCount").textContent = chunks.length;
+  $("healthStatus").textContent = "Ready";
+
+  $("indexStatus").textContent =
+    "Index built with " + chunks.length +
+    " chunks, embeddings, and metadata records.";
+
+  $("indexCode").textContent =
+`documents = load_documents()
+cleaned = clean(documents)
+chunks = split(
+  cleaned,
+  size="${size}",
+  overlap=${overlap}%
+)
+vectors = embed(chunks)
+vector_db.upsert(chunks, vectors, metadata)`;
+}
+
+$("buildIndex").addEventListener("click", buildIndex);
+
+/* -------------------------
+   Stage 2: Retrieval
+------------------------- */
+
+function similarity(query, doc, hybrid) {
+  const queryTokens = tokenize(query);
+
+  const text = (
+    doc.text + " " + doc.title + " " + doc.topic
+  ).toLowerCase();
+
+  const matches = queryTokens.filter(token =>
+    text.includes(token)
+  ).length;
+
+  const keywordScore =
+    matches / Math.max(1, queryTokens.length);
+
+  let semanticScore = 0;
+
+  if (
+    doc.topic === "returns" &&
+    /return|refund|unused|packaging|inspection/i.test(query)
+  ) {
+    semanticScore = 0.8;
+  }
+
+  if (
+    doc.topic === "shipping" &&
+    /shipping|delivery|express|track/i.test(query)
+  ) {
+    semanticScore = 0.8;
+  }
+
+  if (
+    doc.topic === "support" &&
+    /agent|verify|identity|order number/i.test(query)
+  ) {
+    semanticScore = 0.8;
+  }
+
+  let score = keywordScore * 0.65 + semanticScore * 0.35;
+
+  if (hybrid && queryTokens.some(token =>
+    token.length > 3 && text.includes(token)
+  )) {
+    score += 0.08;
+  }
+
+  return Math.min(1, score);
+}
+
+function retrieve() {
+  ensureIndex();
+
+  const query = $("query").value.trim();
+  const hybrid = $("hybrid").checked;
+  const policyOnly = $("policyFilter").checked;
+
+  $("queryCode").textContent =
+`query = ${JSON.stringify(query)}
+embedding = embed(query)
+results = vector_db.search(embedding, top_k=5)
+
+${hybrid ? "keyword_results = bm25(query)\nresults = hybrid_fusion(results, keyword_results)" : "# Dense vector search"}`;
+
+  let results = state.chunks
+    .filter(doc => !policyOnly || doc.type === "policy")
+    .map(doc => ({
+      ...doc,
+      score: similarity(query, doc, hybrid)
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5);
+
+  state.retrieved = results;
+  state.reranked = [];
+
+  const relevant = results.filter(doc => doc.score >= 0.24).length;
+
+  $("recall").textContent = relevant ? "100%" : "0%";
+  $("precision").textContent =
+    Math.round(relevant / Math.max(1, results.length) * 100) + "%";
+
+  $("retrievalResults").innerHTML = results.map((doc, i) => `
+    <div class="result">
+      <div class="doc-title">${escapeHTML(doc.title)}</div>
+      <div class="doc-text">${escapeHTML(doc.text)}</div>
+
+      <div class="tags">
+        <span class="tag">${escapeHTML(doc.id)}</span>
+        <span class="tag">Rank #${i + 1}</span>
+        <span class="tag">Score ${doc.score.toFixed(2)}</span>
+      </div>
+
+      <div class="score">
+        <div class="score-track">
+          <div class="score-fill"
+               style="width:${doc.score * 100}%"></div>
+        </div>
+        <div class="score-number">${doc.score.toFixed(2)}</div>
+      </div>
+    </div>
+  `).join("") || `<p class="muted">No candidates found.</p>`;
+}
+
+$("runRetrieval").addEventListener("click", retrieve);
+
+document.querySelectorAll(".example").forEach(button => {
+  button.addEventListener("click", () => {
+    $("query").value = button.dataset.q;
+    retrieve();
+  });
+});
+
+/* -------------------------
+   Stage 3: Reranking
+------------------------- */
+
+$("topK").addEventListener("input", () => {
+  $("topKLabel").textContent = $("topK").value;
+});
+
+function rerank() {
+  if (!state.retrieved.length) retrieve();
+
+  const query = $("query").value;
+  const useReranker = $("useReranker").checked;
+  const budget = $("contextBudget").checked;
+  const k = Number($("topK").value);
+
+  const results = state.retrieved
+    .map(doc => ({
+      ...doc,
+      rerank: useReranker
+        ? Math.min(1, doc.score + 0.05)
+        : doc.score
+    }))
+    .sort((a, b) => b.rerank - a.rerank);
+
+  const selected = results.slice(
+    0,
+    budget ? Math.min(k, 3) : k
+  );
+
+  state.reranked = selected;
+
+  $("rerankResults").innerHTML = results.map(doc => {
+    const isSelected = selected.some(
+      item => item.id === doc.id
+    );
+
+    return `
+      <div class="result ${isSelected ? "selected" : ""}">
+        <div class="doc-title">${escapeHTML(doc.title)}</div>
+        <div class="doc-text">${escapeHTML(doc.text)}</div>
+
+        <div class="tags">
+          <span class="tag">${escapeHTML(doc.id)}</span>
+          <span class="tag">
+            ${isSelected ? "✓ Selected" : "Excluded"}
+          </span>
+          <span class="tag">
+            Score ${doc.rerank.toFixed(2)}
+          </span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  $("contextCount").textContent =
+    selected.length + " chunks selected";
+
+  $("contextBar").style.width =
+    (selected.length / 5 * 100) + "%";
+
+  $("contextCode").textContent =
+`context = [
+${selected.map(doc =>
+  "  [" + doc.id + "] " + JSON.stringify(doc.text)
+).join(",\n")}
+]`;
+
+  $("promptCode").textContent =
+`SYSTEM:
+You are a helpful customer service assistant.
+Answer using only the provided context.
+If the context is insufficient, say you do not know.
+
+CONTEXT:
+${selected.map(doc =>
+  "[" + doc.id + "] " + doc.text
+).join("\n")}
+
+USER:
+${query}`;
+}
+
+$("runRerank").addEventListener("click", rerank);
+
+/* -------------------------
+   Stage 4: Generation
+------------------------- */
+
+function generate() {
+  if (!state.reranked.length) rerank();
+
+  const query = $("query").value.toLowerCase();
+  const guardrail = $("guardrail").checked;
+  const citations = $("citations").checked;
+
+  let answer = "";
+  let sources = [];
+
+  const relevant = state.reranked.filter(
+    doc => doc.score >= 0.24
+  );
+
+  if (
+    /vacation|holiday|leave|salary|benefit/i.test(query) &&
+    guardrail
+  ) {
+    answer =
+      "I don't have enough information in the retrieved knowledge base " +
+      "to answer that question. Please check the relevant policy or " +
+      "contact support.";
+  }
+
+  else if (
+    /return|refund|unused|packaging/i.test(query) &&
+    relevant.length
+  ) {
+    answer =
+      "Yes. According to the Returns & Refunds Policy, most items " +
+      "can be returned within 30 days of delivery, provided they are " +
+      "unused and in their original packaging. Refunds are processed " +
+      "after inspection.";
+
+    sources = relevant;
+  }
+
+  else if (
+    /express|shipping|delivery|track/i.test(query) &&
+    relevant.length
+  ) {
+    answer =
+      "Express delivery usually takes 1–2 business days. Standard " +
+      "delivery usually takes 3–5 business days. You can track your " +
+      "order from the order details page.";
+
+    sources = relevant;
+  }
+
+  else if (
+    /agent|verify|identity|order number/i.test(query) &&
+    relevant.length
+  ) {
+    answer =
+      "Before creating a return request, the agent should verify the " +
+      "order number, confirm the customer's identity, and explain " +
+      "the applicable policy.";
+
+    sources = relevant;
+  }
+
+  else if (guardrail) {
+    answer =
+      "I don't have enough information in the retrieved knowledge " +
+      "base to answer that question.";
+  }
+
+  else {
+    answer =
+      "The retrieved context may help answer your question, but " +
+      "it does not provide enough evidence for a confident answer.";
+  }
+
+  $("answerText").textContent = answer;
+
+  $("answerSources").innerHTML =
+    citations && sources.length
+      ? `<div class="muted" style="margin-top:12px;font-weight:700">
+           Sources
+         </div>` +
+        sources.map(doc => `
+          <div class="source">
+            ↗ ${escapeHTML(doc.id)} ·
+            ${escapeHTML(doc.title)}
+          </div>
+        `).join("")
+      : "";
+
+  $("coverage").textContent = sources.length
+    ? Math.round(
+        sources.length / Math.max(1, state.reranked.length) * 100
+      ) + "%"
+    : "0%";
+
+  $("faithfulness").textContent =
+    sources.length ? "High" : "Guarded";
+
+  $("genStatus").textContent =
+    "Generated a simulated response from the selected context.";
+}
+
+$("generate").addEventListener("click", generate);
+
+$("runEvaluation").addEventListener("click", () => {
+  $("quiz").classList.remove("hidden");
+  $("quiz").scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+});
+
+$("openQuiz").addEventListener("click", () => {
+  $("quiz").classList.toggle("hidden");
+});
+
+/* -------------------------
+   Evaluation quiz
+------------------------- */
+
+document.querySelectorAll(".quiz-option").forEach(button => {
+  button.addEventListener("click", () => {
+    const correct = button.dataset.answer === "correct";
+
+    document.querySelectorAll(".quiz-option").forEach(option => {
+      option.classList.remove("correct", "wrong");
+    });
+
+    button.classList.add(correct ? "correct" : "wrong");
+
+    $("quizResult").textContent = correct
+      ? "✓ Correct. Recall@K measures whether relevant evidence appears among the retrieved top K results."
+      : "Not quite. CSAT measures user satisfaction. Retrieval quality is measured using metrics such as Recall@K and Precision@K.";
+  });
+});
+
+/* -------------------------
+   Initial setup
+------------------------- */
+
+buildIndex();
+
+})();
+</script>
+
+</body>
+</html>
